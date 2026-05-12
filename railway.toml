@@ -1,0 +1,29 @@
+[build]
+builder = "nixpacks"
+
+# ── Email audit: daily at 08:00 Israel time (UTC+3 → 05:00 UTC) ──
+[[services]]
+name = "email-audit"
+source = "workers/email_audit.py"
+
+[services.deploy]
+startCommand = "python workers/email_audit.py"
+cronSchedule = "0 5 * * *"
+
+# ── DIY log: daily at 07:00 Israel time (04:00 UTC) ──
+[[services]]
+name = "diy-log"
+source = "workers/diy_log.py"
+
+[services.deploy]
+startCommand = "python workers/diy_log.py"
+cronSchedule = "0 4 * * *"
+
+# ── Weekly plan: every Sunday at 18:00 Israel time (15:00 UTC) ──
+[[services]]
+name = "weekly-plan"
+source = "workers/weekly_plan.py"
+
+[services.deploy]
+startCommand = "python workers/weekly_plan.py"
+cronSchedule = "0 15 * * 0"
