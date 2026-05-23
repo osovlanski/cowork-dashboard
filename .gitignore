@@ -1,0 +1,15 @@
+# Google OAuth credentials — never commit
+workers/credentials.json
+
+# Environment files
+.env
+.env.local
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
