@@ -9,3 +9,8 @@
 
 [build]
 builder = "nixpacks"
+
+# Default start command — each Railway service overrides this in
+# Settings → Deploy → Start Command with its own worker script.
+[deploy]
+startCommand = "python workers/email_audit.py"
