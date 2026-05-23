@@ -8,7 +8,6 @@ stores structured data in Supabase → git push → Vercel redeploys.
 
 import os
 import json
-import subprocess
 from datetime import date, timedelta, datetime
 import anthropic
 
@@ -225,8 +224,8 @@ def store_in_supabase(week_start: date, markdown: str):
         return
     import urllib.request
     payload = json.dumps({
-        'week_start':    str(week_start),
-        'raw_markdown':  markdown,
+        'week_start': str(week_start),
+        'plan':       markdown,
     }).encode()
     req = urllib.request.Request(
         f'{url}/rest/v1/weekly_plans',
@@ -246,14 +245,10 @@ def store_in_supabase(week_start: date, markdown: str):
 
 
 def git_push(filepath: str, week_start: date):
-    repo_dir = os.environ.get('REPO_DIR', '.')
-    try:
-        subprocess.run(['git', '-C', repo_dir, 'add', filepath], check=True)
-        subprocess.run(['git', '-C', repo_dir, 'commit', '-m', f'auto: weekly plan {week_start}'], check=True)
-        subprocess.run(['git', '-C', repo_dir, 'push'], check=True)
-        print('  ✓ Git pushed')
-    except subprocess.CalledProcessError as e:
-        print(f'  Warning: git push failed: {e}')
+    from github_push import push_file
+    with open(filepath, 'r', encoding='utf-8') as f:
+        content = f.read()
+    push_file(filepath, content, f'auto: weekly plan {week_start}')
 
 
 def main():

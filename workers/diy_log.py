@@ -7,7 +7,7 @@ based on day of week → prepends to fun/diy/daily_log.md → git push.
 """
 
 import os
-import subprocess
+import json
 from datetime import date, datetime
 import anthropic
 
@@ -115,22 +115,50 @@ def prepend_entry(entry: str) -> str:
     return path
 
 
-def git_push(filepath: str, message: str):
-    repo_dir = os.environ.get('REPO_DIR', '.')
+def store_in_supabase(today: date, entry: str, project: str):
+    """Write the daily log entry to Supabase `diy_log` table."""
+    url = os.environ.get('SUPABASE_URL')
+    key = os.environ.get('SUPABASE_SERVICE_KEY')
+    if not (url and key):
+        print('  Supabase not configured — skipping')
+        return
+    import urllib.request
+    payload = json.dumps({
+        'date':    str(today),
+        'entry':   entry,
+        'project': project,
+    }).encode()
+    req = urllib.request.Request(
+        f'{url}/rest/v1/diy_log',
+        data=payload,
+        headers={
+            'apikey': key, 'Authorization': f'Bearer {key}',
+            'Content-Type': 'application/json',
+            'Prefer': 'resolution=merge-duplicates',
+        },
+        method='POST',
+    )
     try:
-        subprocess.run(['git', '-C', repo_dir, 'add', filepath], check=True)
-        subprocess.run(['git', '-C', repo_dir, 'commit', '-m', message], check=True)
-        subprocess.run(['git', '-C', repo_dir, 'push'], check=True)
-        print(f'  ✓ Git pushed')
-    except subprocess.CalledProcessError as e:
-        print(f'  Warning: git push failed: {e}')
+        urllib.request.urlopen(req, timeout=10)
+        print('  ✓ Stored in Supabase')
+    except Exception as e:
+        print(f'  Warning: Supabase write: {e}')
+
+
+def git_push(filepath: str, message: str):
+    from github_push import push_file
+    with open(filepath, 'r', encoding='utf-8') as f:
+        content = f.read()
+    push_file(filepath, content, message)
 
 
 def main():
     today = date.today()
     print(f'[{datetime.now().isoformat()}] Generating DIY log entry for {today}')
+    project_name, _, _, _ = pick_project(today)
     entry    = generate_entry(today)
     filepath = prepend_entry(entry)
+    store_in_supabase(today, entry, project_name)
     git_push(filepath, f'auto: DIY log {today}')
     print('Done ✓')
 

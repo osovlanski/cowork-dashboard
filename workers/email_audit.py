@@ -9,7 +9,6 @@ stores structured data in Supabase.
 
 import os
 import json
-import subprocess
 from datetime import date, datetime
 import anthropic
 from google.oauth2.credentials import Credentials
@@ -144,46 +143,62 @@ def save_markdown(content: str) -> str:
 
 
 def git_push(filepath: str, message: str):
-    repo_dir = os.environ.get('REPO_DIR', '.')
-    try:
-        subprocess.run(['git', '-C', repo_dir, 'add', filepath], check=True)
-        subprocess.run(['git', '-C', repo_dir, 'commit', '-m', message], check=True)
-        subprocess.run(['git', '-C', repo_dir, 'push'], check=True)
-        print(f'  ✓ Git pushed: {message}')
-    except subprocess.CalledProcessError as e:
-        print(f'  Warning: git push failed: {e}')
+    from github_push import push_file
+    with open(filepath, 'r', encoding='utf-8') as f:
+        content = f.read()
+    push_file(filepath, content, message)
 
 
-def store_in_supabase(audit_date: str, emails: list[dict], markdown: str):
+def classify_email(subject: str, snippet: str) -> tuple:
+    """Return (category, priority) based on simple heuristics."""
+    text = f"{subject} {snippet}".lower()
+    if any(w in text for w in ['invoice', 'payment', 'bill', 'receipt', 'charge']):
+        return 'bill', 'high'
+    if any(w in text for w in ['recruiter', 'opportunity', 'role', 'hiring', 'position', 'job offer']):
+        return 'recruiter', 'medium'
+    if any(w in text for w in ['urgent', 'action required', 'asap', 'deadline', 'follow up']):
+        return 'action', 'high'
+    if any(w in text for w in ['unsubscribe', 'newsletter', 'weekly digest', 'digest', 'update']):
+        return 'newsletter', 'low'
+    return 'newsletter', 'low'
+
+
+def store_in_supabase(today: str, emails: list[dict]):
+    """Write individual emails to the `emails` table (matches dashboard schema)."""
     supabase_url = os.environ.get('SUPABASE_URL')
     supabase_key = os.environ.get('SUPABASE_SERVICE_KEY')
     if not (supabase_url and supabase_key):
         print('  Supabase not configured — skipping DB write')
         return
     import urllib.request
-    payload = json.dumps({
-        'audit_date':       audit_date,
-        'threads_scanned':  len(emails),
-        'raw_markdown':     markdown,
-        'action_items':     [],   # TODO: parse from markdown if needed
-        'sections':         {},
-    }).encode()
-    req = urllib.request.Request(
-        f'{supabase_url}/rest/v1/email_audits',
-        data=payload,
-        headers={
-            'apikey':        supabase_key,
-            'Authorization': f'Bearer {supabase_key}',
-            'Content-Type':  'application/json',
-            'Prefer':        'resolution=merge-duplicates',
-        },
-        method='POST',
-    )
-    try:
-        urllib.request.urlopen(req, timeout=10)
-        print('  ✓ Stored in Supabase')
-    except Exception as e:
-        print(f'  Warning: Supabase write failed: {e}')
+    stored = 0
+    for email in emails:
+        category, priority = classify_email(email.get('subject', ''), email.get('snippet', ''))
+        payload = json.dumps({
+            'sender':   email.get('from', ''),
+            'subject':  email.get('subject', ''),
+            'snippet':  email.get('snippet', ''),
+            'date':     today,
+            'priority': priority,
+            'category': category,
+        }).encode()
+        req = urllib.request.Request(
+            f'{supabase_url}/rest/v1/emails',
+            data=payload,
+            headers={
+                'apikey':        supabase_key,
+                'Authorization': f'Bearer {supabase_key}',
+                'Content-Type':  'application/json',
+                'Prefer':        'resolution=merge-duplicates',
+            },
+            method='POST',
+        )
+        try:
+            urllib.request.urlopen(req, timeout=10)
+            stored += 1
+        except Exception as e:
+            print(f'  Warning: Supabase write for "{email.get("subject", "?")}": {e}')
+    print(f'  ✓ Stored {stored}/{len(emails)} emails in Supabase')
 
 
 # ── Main ──────────────────────────────────────────────────
@@ -201,7 +216,7 @@ def main():
     print('  ✓ Audit generated')
 
     filepath = save_markdown(audit)
-    store_in_supabase(today, emails, audit)
+    store_in_supabase(today, emails)
     git_push(filepath, f'auto: email audit {today}')
 
     print('Done ✓')
