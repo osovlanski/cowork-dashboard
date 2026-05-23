@@ -1,0 +1,4 @@
+# Force nixpacks to treat this repo as Python.
+# Needed because package.json (for Vercel) also lives at the root,
+# and nixpacks would otherwise pick Node.js over Python.
+providers = ["python"]
