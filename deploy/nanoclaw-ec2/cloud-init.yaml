@@ -4,9 +4,9 @@
 # Paste this as the instance "User data" when launching the EC2 instance.
 #
 # It installs everything NanoClaw needs (Docker, Node 22, pnpm, build tools),
-# but does NOT clone the repo or run setup — those need your Azure DevOps
-# credentials and an interactive terminal. SSH in afterwards and run
-# bootstrap.sh (see README.md).
+# but does NOT clone the repo or run setup — those need your git credentials
+# and an interactive terminal. SSH in afterwards and run bootstrap.sh
+# (see README.md).
 # ───────────────────────────────────────────────────────────────────────────
 package_update: true
 package_upgrade: true

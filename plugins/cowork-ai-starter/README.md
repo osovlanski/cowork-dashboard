@@ -1,4 +1,4 @@
-# payoneer-ai-starter
+# cowork-ai-starter
 
 A small, shareable Claude Code plugin that gives a teammate two things on day one:
 
@@ -8,8 +8,8 @@ A small, shareable Claude Code plugin that gives a teammate two things on day on
    skills/rules/agents/hooks into `proposals/<date>/` for human review. Nothing
    auto-commits.
 
-Distilled from the full `dotfiles-ai` repo into a one-install bundle so coworkers
-get the highest-value pieces without cloning and running `setup.sh`.
+Distilled from a larger team AI-standards repo into a one-install bundle so
+coworkers get the highest-value pieces without cloning and running a full setup.
 
 ## What's inside
 
@@ -24,7 +24,7 @@ get the highest-value pieces without cloning and running `setup.sh`.
 
 ## Install
 
-Share the `payoneer-ai-starter.plugin` file (drag into Cowork, or via the Claude
+Share the `cowork-ai-starter.plugin` file (drag into Cowork, or via the Claude
 Code plugin install flow). Once installed:
 
 - The hooks are active automatically on the relevant tool events.
@@ -42,9 +42,8 @@ Code plugin install flow). Once installed:
   pipe-into-heredoc), which is the correct, non-silently-breaking pattern.
 - The trends-scan skill writes only under `proposals/` and never pushes — review
   and `git mv` accepted candidates into place yourself.
-- This is the internal Payoneer edition: the scan keeps the Payoneer-stack
-  keyword filters (.NET, Mongo, Kafka, Azure DevOps, Coralogix). For a generic
-  external version, strip the Tier-C block in `skills/ai-trends-scan/SKILL.md`.
-- Full versions of these (plus formatters, test-gate, session-context hooks, the
-  proposals review dashboard, and the dev-lifecycle orchestrator) live in
-  `dotfiles-ai` — point teammates there once they want more.
+- The trends-scan's Tier-C keyword filter is a placeholder — edit the list in
+  `skills/ai-trends-scan/SKILL.md` to match your team's stack, or remove it.
+- Full versions of these (plus formatters, test-gate, session-context hooks, a
+  proposals review dashboard, and a dev-lifecycle orchestrator) live in your
+  team's AI-standards repo — point teammates there once they want more.

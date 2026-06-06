@@ -8,12 +8,11 @@
 # Prereqs: cloud-init.yaml already ran (Docker + Node 22 + pnpm present), and
 # you've logged out/in once so the 'ubuntu' user is in the docker group.
 #
-# Azure DevOps repo needs auth — you'll be prompted for a username + PAT
-# (Personal Access Token with Code:Read) at clone time. Override the URL with
-# REPO_URL=... if you use a different remote (e.g. the public upstream).
+# Set REPO_URL to your NanoClaw git remote. If the host is private you'll be
+# prompted for a username + personal access token (read scope) at clone time.
 set -euo pipefail
 
-REPO_URL="${REPO_URL:-https://dev.azure.com/Payoneer/Payoneer/_git/nano-personal-assistant}"
+REPO_URL="${REPO_URL:?Set REPO_URL to your NanoClaw git remote, e.g. https://github.com/youruser/nanoclaw.git}"
 TARGET="${TARGET:-$HOME/nanoclaw}"
 KIT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 

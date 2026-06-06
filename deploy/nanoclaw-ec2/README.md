@@ -36,8 +36,8 @@ Mac. The only real porting work vs. macOS is swapping the `launchd` plist for a
    bash bootstrap.sh
    ```
 
-   It clones NanoClaw (you'll be prompted for an **Azure DevOps PAT** with
-   `Code:Read`, since the repo is private), runs `bash nanoclaw.sh` (interactive —
+   It clones NanoClaw (if your git host is private you'll be prompted for a
+   **personal access token** with read scope), runs `bash nanoclaw.sh` (interactive —
    **pick Telegram** for a headless server), builds `dist/`, and installs the
    systemd service. Override the source with `REPO_URL=...` if needed.
 

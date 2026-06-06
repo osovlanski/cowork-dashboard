@@ -145,19 +145,19 @@ isolation; note Apple-container networking quirks in the repo's docs don't apply
 
 ## 4. Copy `dotfiles-ai` concepts to coworkers
 
-**What `dotfiles-ai` is:** Payoneer's "AI coding standards" repo — one source of truth that
+**What `dotfiles-ai` is:** the company's "AI coding standards" repo — one source of truth that
 `setup.sh` fans out into `~/.claude` and `~/.cursor` for Claude Code, Cursor, and Copilot.
 It's a genuinely strong template. Notable assets:
 
 - **Rules mirror:** edit `CLAUDE.md` once; a pre-commit hook regenerates `AGENTS.md`,
   `.cursor/rules/ai-rules.mdc`, and `.github/copilot-instructions.md`.
 - **~40 skills** (`.claude/skills/`), e.g. `ai-trends-scan`, `dev-lifecycle`,
-  `payoneer-pr-review`, `secret-scan`, `coralogix-*-triage`, ADO + gitnexus suites.
+  `company-pr-review`, `secret-scan`, `coralogix-*-triage`, ADO + gitnexus suites.
 - **8 sub-agents** (`code-reviewer`, `security-reviewer`, `planner`, `test-writer`, …).
 - **11 safety hooks** (`pre-bash-secret-scan`, `pre-write-secret-scan`,
   `pre-bash-block-destructive`, `protect-files`, `post-edit-format`, `stop-test-gate`, …).
 - **`ai-trends-scan` → `proposals/` loop:** a daily scan (`scripts/run-trends-scan.sh` +
-  `com.payoneer.ai-trends-scan.plist`) drafts candidate skills/rules/agents/hooks into
+  `com.company.ai-trends-scan.plist`) drafts candidate skills/rules/agents/hooks into
   `proposals/<date>/` for human review — nothing auto-merges. ~40 days of proposals exist.
 - **`tools/dashboard`:** a ~600-line TS/Node local UI to accept/reject those proposals.
 - **`shraga`:** a monitoring/routine-automation sub-project (Coralogix/Grafana/Dynatrace

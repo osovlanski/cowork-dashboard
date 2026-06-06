@@ -1,0 +1,10 @@
+{
+  "name": "cowork-ai-starter",
+  "version": "0.1.0",
+  "description": "Team starter kit: daily AI-trends-scan proposal loop plus secret-scan / destructive-command / protected-file safety hooks. A lean, shareable subset of a team AI-standards setup for easy adoption on Claude Code.",
+  "author": {
+    "name": "Itay Osovlanski"
+  },
+  "keywords": ["safety", "hooks", "trends", "secret-scan", "team"],
+  "hooks": "./hooks/hooks.json"
+}

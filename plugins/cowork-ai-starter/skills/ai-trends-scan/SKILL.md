@@ -34,12 +34,11 @@ to `proposals/<YYYY-MM-DD>/` and let the human review.
 8. **r/ClaudeAI top posts (this week)** — best via the `/.json` endpoint
 9. **Hacker News search** — `https://hn.algolia.com/?q=claude+code` filtered by date
 
-### Tier C — Payoneer relevance (keyword filters)
+### Tier C — your-stack relevance (keyword filters)
 
-After collecting candidates, prefer items mentioning: `.NET`, `dotnet`, `MongoDB`,
-`Kafka`, `Azure DevOps`, `microservices`, `outbox`, `Coralogix`, `MSTest`,
-`SonarQube`. Down-rank items focused on Python/Rust/etc. unless they're general
-patterns.
+After collecting candidates, prefer items mentioning your team's stack. Edit this
+list to match what you use (languages, frameworks, infra, CI, observability).
+Down-rank items outside your stack unless they're general patterns.
 
 ## Workflow
 
@@ -65,7 +64,7 @@ server), score it on this rubric:
 
 | Dimension | 0 | 1 | 2 | 3 |
 |---|---|---|---|---|
-| Relevance to Payoneer stack | Off-topic | Tangential | Useful | Direct fit |
+| Relevance to your stack | Off-topic | Tangential | Useful | Direct fit |
 | Format quality | Broken | Loose Markdown | Skill/rule format | Drop-in ready |
 | Novelty (we don't already have it) | Duplicate | Variant | Adjacent | New |
 | Security posture | Adds risk | Neutral | Reduces risk | Hardens our setup |
