@@ -270,6 +270,21 @@ main { padding: 32px 36px; overflow-y: auto; }
     <span class="icon">▦</span> Weekly Plan
   </button>
 
+  <div class="nav-section">Finance</div>
+  <button class="nav-item" onclick="showPage('markets')" id="nav-markets">
+    <span class="icon">📈</span> Markets
+  </button>
+
+  <div class="nav-section">Shopping</div>
+  <button class="nav-item" onclick="showPage('deals')" id="nav-deals">
+    <span class="icon">🛒</span> Deals
+  </button>
+
+  <div class="nav-section">Reading</div>
+  <button class="nav-item" onclick="showPage('books')" id="nav-books">
+    <span class="icon">📚</span> Books
+  </button>
+
   <div class="nav-footer">
     <div class="nav-status"><span class="dot" id="sb-dot"></span><span id="sb-status">connecting...</span></div>
   </div>
@@ -375,6 +390,42 @@ main { padding: 32px 36px; overflow-y: auto; }
     <div id="plan-content"><div class="loading"><div class="spinner"></div> Loading...</div></div>
   </div>
 
+  <!-- Markets -->
+  <div class="page" id="page-markets">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Markets</div>
+        <div class="page-subtitle">Daily brief from Railway worker · information only, not advice</div>
+      </div>
+      <button class="btn btn-sm" onclick="loadMarkets()">↺</button>
+    </div>
+    <div id="markets-content"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  </div>
+
+  <!-- Deals -->
+  <div class="page" id="page-deals">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Deals</div>
+        <div class="page-subtitle">Daily product scan (eBay) — scored for value</div>
+      </div>
+      <button class="btn btn-sm" onclick="loadDeals()">↺</button>
+    </div>
+    <div id="deals-list"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  </div>
+
+  <!-- Books -->
+  <div class="page" id="page-books">
+    <div class="page-header">
+      <div>
+        <div class="page-title">Reading</div>
+        <div class="page-subtitle">Weekly book picks — tap ✨ for an AI summary</div>
+      </div>
+      <button class="btn btn-sm" onclick="loadBooks()">↺</button>
+    </div>
+    <div id="books-list"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  </div>
+
 </main>
 </div>
 
@@ -433,6 +484,9 @@ function showPage(id) {
   if (id === 'diy') loadDIY();
   if (id === 'habits') renderHabits();
   if (id === 'plan') loadPlan();
+  if (id === 'markets') loadMarkets();
+  if (id === 'deals') loadDeals();
+  if (id === 'books') loadBooks();
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────────
@@ -630,6 +684,98 @@ async function aiSummary(type, id, label) {
 }
 
 function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+// ── Markets ───────────────────────────────────────────────────────────────────
+function mdToHtml(md) {
+  // Minimal markdown → HTML (headings, bullets, bold, italics) for brief/plan text.
+  return (md || '')
+    .replace(/^### (.*)$/gm, '<h4>$1</h4>')
+    .replace(/^## (.*)$/gm, '<h3>$1</h3>')
+    .replace(/^# (.*)$/gm, '<h2>$1</h2>')
+    .replace(/^\s*[-*] (.*)$/gm, '• $1<br>')
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/_(.+?)_/g, '<em>$1</em>')
+    .replace(/\n{2,}/g, '<br><br>');
+}
+
+async function loadMarkets() {
+  const el = document.getElementById('markets-content');
+  try {
+    const rows = await SB.get('market_brief', 'order=date.desc&limit=1');
+    if (!rows.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📈</div>No brief yet — worker runs weekday mornings</div>'; return; }
+    const b = rows[0];
+    const data = b.data || {};
+    const cards = Object.values(data).map(s => `
+      <div class="card ${s.chg_pct >= 0 ? 'card-accent' : 'card-purple'}">
+        <div class="card-label">${s.symbol}</div>
+        <div class="card-value">${s.price}</div>
+        <div class="card-meta">${s.chg_pct >= 0 ? '▲' : '▼'} ${s.chg_pct}% · ${s.trend}</div>
+      </div>`).join('');
+    el.innerHTML =
+      (cards ? `<div class="grid grid-4">${cards}</div>` : '') +
+      `<div class="log-entry" style="margin-top:20px"><div class="log-date">${b.date}</div>` +
+      `<div class="log-content">${mdToHtml(b.brief)}</div></div>`;
+  } catch(e) {
+    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+// ── Deals ─────────────────────────────────────────────────────────────────────
+async function loadDeals() {
+  const el = document.getElementById('deals-list');
+  try {
+    const deals = await SB.get('deals', 'order=found_date.desc,value_score.desc&limit=40');
+    if (!deals.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">🛒</div>No deals yet — scanner runs daily at 09:00</div>'; return; }
+    el.innerHTML = deals.map(d => `
+      <div class="log-entry">
+        <div class="log-date">${d.search_term} · ${d.source}${d.value_score ? ` · score ${d.value_score}/10` : ''}</div>
+        <div class="log-content">
+          <strong>${d.title}</strong><br>
+          ${d.price != null ? `${d.price} ${d.currency} · ` : ''}${d.condition || ''}
+          ${d.reason ? `<br><em>${d.reason}</em>` : ''}
+          <br><a href="${d.url}" target="_blank" rel="noopener" style="color:var(--accent)">View on ${d.source} ↗</a>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+// ── Books ─────────────────────────────────────────────────────────────────────
+async function loadBooks() {
+  const el = document.getElementById('books-list');
+  try {
+    const books = await SB.get('books', 'order=picked_week.desc&limit=30');
+    if (!books.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📚</div>No picks yet — worker runs Sunday mornings</div>'; return; }
+    el.innerHTML = books.map(b => `
+      <div class="log-entry">
+        <div class="log-date">${b.category || 'book'} · ${b.picked_week}${b.status && b.status !== 'suggested' ? ` · ${b.status}` : ''}</div>
+        <div class="log-content">
+          <strong>${b.title}</strong>${b.author ? ` — ${b.author}` : ''}
+          ${b.reason ? `<br>${b.reason}` : ''}
+          <br><button class="ai-btn" style="margin-top:8px" onclick="aiBookSummary('${b.id}','${(b.title||'').replace(/'/g,"\\'")}')">✨ AI summary</button>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+async function aiBookSummary(id, title) {
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('modal-content').innerHTML = '<div class="loading"><div class="spinner"></div> Asking Claude...</div>';
+  try {
+    const res = await fetch(`${CONFIG.vercel.apiUrl}/api/summary`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'book', id, name: title }),
+    });
+    const data = await res.json();
+    document.getElementById('modal-content').textContent = data.summary || data.error || 'No response';
+  } catch(e) {
+    document.getElementById('modal-content').textContent = 'Error: ' + e.message;
+  }
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 async function loadAll() {

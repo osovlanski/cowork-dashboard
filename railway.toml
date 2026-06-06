@@ -1,11 +1,27 @@
-# railway.toml — shared build config for all three cron services.
+# railway.toml — shared build config for all cron services.
 # Each service's startCommand and cronSchedule are set per-service
 # in the Railway dashboard (Settings → Deploy).
 #
-# Services:
-#   email-audit  → python workers/email_audit.py   cron: 0 5 * * *   (08:00 IL daily)
-#   diy-log      → python workers/diy_log.py        cron: 0 4 * * *   (07:00 IL daily)
-#   weekly-plan  → python workers/weekly_plan.py    cron: 0 15 * * 0  (18:00 IL Sunday)
+# ┌─────────────────────────────────────────────────────────────────┐
+# │  Service          │ Script                   │ Cron (UTC)       │
+# ├─────────────────────────────────────────────────────────────────┤
+# │  email-audit      │ workers/email_audit.py   │ 0 5 * * *        │
+# │                   │                          │ (08:00 IL daily) │
+# │  diy-log          │ workers/diy_log.py       │ 0 4 * * *        │
+# │                   │                          │ (07:00 IL daily) │
+# │  telegram-brief   │ workers/telegram_brief.. │ 30 4 * * *       │
+# │                   │                          │ (07:30 IL daily) │
+# │  weekly-plan      │ workers/weekly_plan.py   │ 0 15 * * 0       │
+# │                   │                          │ (18:00 IL Sunday)│
+# │  youtube-import   │ workers/youtube_import.. │ 0 6 * * 0        │
+# │                   │                          │ (09:00 IL Sunday)│
+# │  market-brief     │ workers/market_brief.py  │ 30 6 * * 1-5     │
+# │                   │                          │ (08:30 IL wkdays)│
+# │  deal-scan        │ workers/deal_scan.py     │ 0 7 * * *        │
+# │                   │                          │ (09:00 IL daily) │
+# │  book-picks       │ workers/book_picks.py    │ 30 7 * * 0       │
+# │                   │                          │ (09:30 IL Sunday)│
+# └─────────────────────────────────────────────────────────────────┘
 
 [build]
 builder = "nixpacks"
