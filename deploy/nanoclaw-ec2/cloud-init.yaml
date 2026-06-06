@@ -1,0 +1,43 @@
+#cloud-config
+# ───────────────────────────────────────────────────────────────────────────
+# NanoClaw EC2 host preparation (Ubuntu 22.04 / 24.04).
+# Paste this as the instance "User data" when launching the EC2 instance.
+#
+# It installs everything NanoClaw needs (Docker, Node 22, pnpm, build tools),
+# but does NOT clone the repo or run setup — those need your Azure DevOps
+# credentials and an interactive terminal. SSH in afterwards and run
+# bootstrap.sh (see README.md).
+# ───────────────────────────────────────────────────────────────────────────
+package_update: true
+package_upgrade: true
+
+packages:
+  - git
+  - curl
+  - ca-certificates
+  - build-essential      # native build for better-sqlite3
+  - python3
+  - docker.io
+
+runcmd:
+  # Docker: enable + allow the default 'ubuntu' user to use it without sudo
+  - systemctl enable --now docker
+  - usermod -aG docker ubuntu
+  # Node 22 (NanoClaw requires >=20; .nvmrc pins 22) via NodeSource
+  - curl -fsSL https://deb.nodesource.com/setup_22.x | bash -
+  - apt-get install -y nodejs
+  # pnpm via corepack (NanoClaw uses pnpm@10.x)
+  - corepack enable
+  - corepack prepare pnpm@10.33.0 --activate
+  # Friendly next-steps banner on login
+  - |
+    cat > /etc/motd <<'EOF'
+    ───────────────────────────────────────────────
+     NanoClaw host is prepared (Docker + Node 22 + pnpm).
+     Next:  log out/in once (for the docker group), then run:
+       bash bootstrap.sh
+     See deploy/nanoclaw-ec2/README.md for the full runbook.
+    ───────────────────────────────────────────────
+    EOF
+
+final_message: "NanoClaw host prep complete after $UPTIME s. SSH in and run bootstrap.sh."

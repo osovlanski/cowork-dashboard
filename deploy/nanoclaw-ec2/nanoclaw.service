@@ -1,0 +1,25 @@
+# systemd unit for NanoClaw — the Linux replacement for the macOS launchd plist
+# (launchd/com.nanoclaw.plist). Installed by install-service.sh, which fills in
+# the paths. Assumes the repo lives at /home/ubuntu/nanoclaw and runs as 'ubuntu'.
+[Unit]
+Description=NanoClaw personal assistant
+After=network-online.target docker.service
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/nanoclaw
+# Mirrors the launchd ProgramArguments: node dist/index.js
+ExecStart=/usr/bin/node /home/ubuntu/nanoclaw/dist/index.js
+# Optional per-host env (ASSISTANT_NAME, etc.). '-' = ok if file is absent.
+EnvironmentFile=-/home/ubuntu/nanoclaw/.env
+Restart=always
+RestartSec=5
+# Logs go to the journal: view with `journalctl -u nanoclaw -f`
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
