@@ -1,14 +1,18 @@
 """
-setup_gmail_auth.py — Run this ONCE locally to get your Gmail refresh token.
+setup_gmail_auth.py — Run this ONCE locally to get your Google OAuth refresh token.
+
+Grants access to both Gmail (email audit) and YouTube (watch-later import).
+A single refresh token covers both — run this script once and copy the token
+to Railway env vars as GMAIL_REFRESH_TOKEN.
 
 Usage:
   1. Create a Google Cloud project at https://console.cloud.google.com
-  2. Enable the Gmail API
+  2. Enable both the Gmail API AND the YouTube Data API v3
   3. Create OAuth 2.0 credentials (type: Desktop app)
   4. Download credentials.json to this directory
   5. Run: python workers/setup_gmail_auth.py
-  6. A browser window opens → log in → grant access
-  7. Copy the printed GMAIL_REFRESH_TOKEN into Railway env vars
+  6. A browser window opens → log in → grant access to both scopes
+  7. Copy the printed values into Railway env vars
 """
 
 import json
@@ -18,7 +22,10 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+SCOPES = [
+    'https://www.googleapis.com/auth/gmail.readonly',
+    'https://www.googleapis.com/auth/youtube.readonly',
+]
 CREDS_FILE = os.path.join(os.path.dirname(__file__), 'credentials.json')
 
 def main():
@@ -41,6 +48,7 @@ def main():
     print(f"\nGMAIL_CLIENT_ID     = {client_info['client_id']}")
     print(f"GMAIL_CLIENT_SECRET = {client_info['client_secret']}")
     print(f"GMAIL_REFRESH_TOKEN = {creds.refresh_token}")
+    print("\nThis single refresh token covers: Gmail ✓  YouTube ✓")
     print("\n" + "="*60)
     print("Keep these SECRET — never commit them to git.")
     print("="*60 + "\n")

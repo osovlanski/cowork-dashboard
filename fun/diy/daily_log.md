@@ -1,5 +1,190 @@
 # Daily DIY Log
 
+## 2026-06-07 (Sunday) — Reflection & Next Week's Pick 🪞
+
+Hey Itay! Sunday check-in. This week was a double feature: **Crate Storage (Project #5)** on Friday and **LED Ambient Lighting (Project #4)** on Saturday. So — how'd it go? Are there wine crates stacked into a bookshelf and LED strips glowing behind your monitor right now? Or is one still in the "supplies acquired" phase? Both count. If either is 90% there, a quiet Sunday is the perfect window to finish the mounting or program those last lighting scenes.
+
+**Next week's pick: Wall-Mounted Floating Shelves (Project #1) 📚**
+
+This was the very first build back in late April and it hasn't come up since — overdue for a proper go. It's the most satisfying medium project on the list: a clean, level row of shelves on a bare wall, used every single day. Medium difficulty, 2-3 hours, 200-400 ILS.
+
+Monday move: grab a stud finder, level, and bracket set from Ace (Allenby) or Obi. Studs matter in older TLV buildings — plaster alone won't hold the weight. Pick brackets rated for 2× your planned load.
+
+Next Sunday you'll either be loading books onto them or telling me how the stud hunt went. Have a relaxed one. 🌴
+
+---
+
+## 2026-06-06 (Saturday) — Full Project Day: Custom LED Ambient Lighting 💡
+
+Shabbat shalom, Itay! Full project Saturday — and today's pick is the one that's been waiting in the wings since late April: **Custom LED Ambient Lighting (Project #4)**. It was flagged as a Thursday start on 4/30, but a build this satisfying deserves a proper Saturday. Two hours, and your apartment will look completely different tonight.
+
+**The vitals**
+- Time: ~2 hours
+- Budget: 300-500 ILS
+- Difficulty: Medium
+- Tools: RGB LED strip lights, power adapter, scissors, ruler, cable clips
+
+**All the steps**
+1. Pick up smart RGB LED strips — Philips Hue for premium, or a budget alternative from Ace Hardware / AliExpress. USB-powered strips are cheapest and work with most setups.
+2. Decide on placement: behind your monitor, under desk shelves, or along the headboard you just built. Clean the surface first — adhesive sticks way better to dust-free areas.
+3. Measure the run length and cut LED strips at the marked cut points (never mid-strip).
+4. Peel the adhesive backing and apply carefully, pressing firmly as you go.
+5. Connect the power adapter and plug in.
+6. Download the companion app and pair via Bluetooth — takes 2 minutes.
+7. Program your scenes: warm white for focus, cool blue for late-night, something dramatic for Zoom backgrounds.
+8. Tuck and clip any exposed wire with cable management clips.
+
+Flip the lights off and step back. That's the moment. 🌈
+
+---
+
+## 2026-06-05 (Friday) — Quick Win: Upcycled Crate Storage 📦
+
+TGIF, Itay! Friday quick win — and this one's been calling your name since the May 31 Sunday reflection: **Upcycled Crate Storage (Project #5)**. No drilling, no studs, no wall damage — perfect for a rental. Easy enough to finish tonight or over the weekend.
+
+**The vitals**
+- Time: 1-2 hours assembly + 2 hours painting (can split across tonight/tomorrow)
+- Budget: 200-350 ILS
+- Difficulty: Easy
+- Tools: Wooden crates, sandpaper, paint/stain, brush, screws, drill
+
+**Tonight's 3-step game plan:**
+1. Source 4-6 wooden crates — check Nahalat Binyamin market, a wine shop, or order from Obi.co.il tonight for quick delivery. Wine crate = free if you ask nicely.
+2. Sand any rough edges (5 minutes per crate), then apply your first coat of stain or paint — modern white, natural wood, or bold color-blocked.
+3. Once dry, stack in your chosen config and screw adjacent crates together from the inside for stability. Done.
+
+No walls harmed, no landlord drama, and you get a bookshelf/storage unit that actually has character. June Friday energy — this one's genuinely achievable before Shabbat starts. 🌴
+
+---
+
+
+
+## 2026-05-31 (Sunday) — Reflection & Next Week's Pick 🪞
+
+Hey Itay! Sunday check-in. This week was all about the **DIY Headboard (Project #10)** — you got the shopping list Wednesday for the weekend build. So: did the plywood get cut? Is there a headboard behind your pillows right now, or is it still a sheet of wood leaning against the wall? Either way counts. If it's 90% there and just needs mounting, this quiet Sunday is the perfect moment to hang it and call it done.
+
+**Next week's pick: Upcycled Crate Storage (Project #5) 📦**
+
+This one's never come up, and it's overdue — the most low-pressure build on the whole list. Wooden crates from a market or wine shop become a bookshelf, storage cubes, or a side unit. No studs, no drilling into walls, totally rental-safe. Easy difficulty, ~1-2 hours assembly plus painting, 200-350 ILS.
+
+Monday move: hunt down 4-6 crates (Nahalat Binyamin market, fruit/wine shops, or online). Sand, stain or paint in a tone you like, stack, and screw together for stability. Modern white, rustic natural, or color-blocked — your call.
+
+Next Sunday you'll either be stacking books on it or telling me how the crate hunt went. 🌴
+
+---
+
+## 2026-05-27 (Wednesday) — Weekend Project: DIY Headboard 🛏️
+
+Hey Itay! Wednesday = stock up so you can build this weekend — and Sunday already called the play: **DIY Headboard (Project #10)**. A headboard turns a mattress situation into an actual bedroom. Medium difficulty, 3-4 hours, and the result sticks around every morning.
+
+**The vitals**
+- Time: 3-4 hours
+- Budget: 400-800 ILS
+- Difficulty: Medium
+- Tools: Plywood or wood slats, fabric (optional), staple gun, drill, saw, sandpaper
+
+**Your Obi / Ace Hardware shopping list:**
+- 1 sheet of plywood, 120-150cm wide × 60cm tall (or pre-cut at the store — Obi will cut it for you)
+- 2×4cm wooden slats if you're going the slatted look (6-8 pieces, 120cm each)
+- Sandpaper — 120 grit for rough edges, 220 for finish
+- Wood stain or matte paint in your preferred tone
+- 2 wall-mount brackets + screws + wall anchors
+- Optional: 1m of upholstery fabric + foam padding + a staple gun if you want the upholstered version
+
+Pop onto obi.co.il tonight to price the plywood and order if you'd rather skip the trip. Saturday morning: coffee, hardware run, and you're building by noon. 🛠️
+
+---
+
+
+
+## 2026-05-24 (Sunday) — Reflection & Next Week's Pick 🪞
+
+Hey Itay! Sunday check-in — hope yesterday's build went well.
+
+Yesterday was all about the **Rope Bookshelf (Project #12)** — if those planks are now hanging from your wall with books on them, that's genuinely one of the best things you can put in a Tel Aviv apartment. How did it go? If it's 90% done but the rope needs one more adjustment, today is the perfect chill Sunday morning finish.
+
+If it's still in the "supplies are gathered" stage — no stress, that's still progress.
+
+**Next week's pick: DIY Headboard (Project #10)**
+
+It hasn't come up yet and it's overdue. A headboard completely transforms a bedroom — plywood + fabric + a staple gun, and suddenly your sleeping corner looks like a proper design choice instead of a mattress situation. Medium difficulty, 3-4 hours, 400-800 ILS. Wood slats for industrial vibes, or wrapped linen for that clean minimal look. Either version is deeply satisfying.
+
+Next Sunday you'll either be sleeping in front of it or telling me what happened. 😄
+
+Have a good one, Itay. 🌴
+
+---
+
+## 2026-05-23 (Saturday) — Full Project Day: Rope Bookshelf 🪢
+
+Shabbat shalom, Itay! It's a full project Saturday, and today's pick is one that's been building up for a while: **Rope Bookshelf (Project #12)**. You got the shopping list ten days ago — if those supplies are sitting somewhere waiting, today is the day. If not, Ace or Obi in the morning and you're building by noon.
+
+**The vitals**
+- Time: 2-3 hours
+- Budget: 300-500 ILS
+- Difficulty: Medium
+- Tools: Wood planks, 10-15mm rope, drill + 15mm bit, stud finder, wall anchors/hooks, wood stain (optional)
+
+**All the steps**
+1. Sand the wood planks — hit all edges with 120-grit until smooth and splinter-free.
+2. Drill holes in each top corner of every plank (use the 15mm bit, ~3cm from each edge).
+3. Use a stud finder to locate solid ceiling or high-wall mounting points. Mark them.
+4. Install load-rated hooks or anchors (you want at least 15kg rated per hook).
+5. Cut rope into equal lengths — enough slack for each shelf height, plus knot room.
+6. Thread rope through the plank holes and tie a secure knot below each plank (figure-eight or simple stopper knot).
+7. Hang the ropes from the hooks and adjust height to taste. Carabiners make this easy to tweak.
+8. Level the planks by adjusting rope length — measure diagonally to confirm they're square.
+
+Load it up with your most-read books or a few plants and step back. That's a statement shelf. 📚
+
+---
+
+
+
+## 2026-05-15 (Friday) — Quick Win: Grow Your Own Herbs 🌿
+
+TGIF, Itay! Friday quick win, and May in Tel Aviv is literally the best possible time for this one: **Kitchen Herb Garden (Project #3)**. One hour of setup tonight = fresh basil on your pasta all summer. Zero wall holes, zero heavy lifting — just good things growing on your balcony.
+
+**The vitals**
+- Time: ~1 hour setup (then 2 min/day to water)
+- Budget: 250-400 ILS
+- Difficulty: Easy
+- Tools: Planters with drainage holes, potting soil, seedlings or seeds, watering can
+
+**Tonight's 3-step game plan:**
+1. Stop by a nursery (משתלה) or even the supermarket plant section on the way home — grab basil, mint, parsley, and coriander *seedlings* (not seeds if you want results this week).
+2. Fill planters with potting soil (not garden soil — drainage is the whole game), pop in the seedlings, water gently until moist.
+3. Place on the sunniest balcony or windowsill spot you've got — 6+ hours of sun and these will go wild.
+
+Pinch off any flower buds you spot — that keeps the leaves coming all season. Fresh coriander for shakshuka, mint for iced tea, basil for everything. Shabbat shalom! 🕯️
+
+---
+
+## 2026-05-13 (Wednesday) — Weekend Project: Rope Bookshelf 🪢
+
+Hey Itay! Wednesday = plan your weekend build — and Sunday already called it: **Rope Bookshelf (Project #12)** is next. Time to make the shopping list so you can grab everything in one trip this weekend.
+
+**The vitals**
+- Time: 2-3 hours
+- Budget: 300-500 ILS
+- Difficulty: Medium
+
+**Your Obi / Ace Hardware shopping list:**
+- 2–3 wooden planks, ~80-100cm × 20cm (pine or oak) — Obi sells pre-cut boards
+- Thick rope, 10–15mm diameter, natural or dyed — ~3 meters per shelf (×2 shelves = 6m total)
+- 4 ceiling or wall hooks with anchors (load-rated, 10kg+)
+- 4 carabiners or S-hooks (optional but great for adjustability)
+- Wood stain or oil — pick a tone that matches your space
+- Medium-grit sandpaper (120 grit)
+- Drill + 15mm wood drill bit for the rope holes
+
+**Optional upgrade**: Obi has pre-stained boards that skip the stain step entirely.
+
+Pop into Obi online (obi.co.il) tonight to check availability — some rope sizes sell out fast. Weekend's looking like a solid build day. 📚
+
+---
+
+
 ## 2026-05-12 (Tuesday) — Quick Win: Desk Organizer from PVC Pipe 🗂️
 
 Hey Itay! Tuesday after-work quick win — and this one is deeply on-brand for a software engineer: **Desk Organizer from PVC Pipe (Project #11)**. Modular, customizable, and weirdly satisfying to build.
