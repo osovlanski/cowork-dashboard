@@ -1,5 +1,29 @@
 # Daily DIY Log
 
+## 2026-06-20 (Saturday) — Full Project Day: Window Insulation Film ☀️
+
+Shabbat shalom, Itay! Full project Saturday, and June heat makes the call obvious: **Window Insulation Film for Summer (Project #7)**. It's the one solid medium build that's never had a proper Saturday — and there's no better time. Get it up today and you'll feel cooler on the very next hot afternoon, plus less screen glare during work.
+
+**The vitals**
+- Time: 1-2 hours per window
+- Budget: 300-500 ILS for 3-4 windows
+- Difficulty: Medium
+- Tools: Heat-rejecting window film, spray bottle, squeegee, utility knife, dish soap
+
+**All the steps**
+1. Measure each window pane exactly — width × height. Make a list so you buy the right amount (grab a little extra; trimming beats stretching).
+2. Pick up heat-rejecting film (Ace, Obi, or AliExpress) — the reflective kind, not just privacy film.
+3. Cut each piece 1-2cm larger than its pane on every side.
+4. Mix water + a few drops of dish soap in the spray bottle.
+5. Spray the glass thoroughly with the soapy water.
+6. Peel the film backing, spray the adhesive side too, then position it on the wet glass.
+7. Smooth from the center outward, squeegeeing out bubbles and excess water.
+8. Once dry, trim the overhang clean with the utility knife.
+
+Cooler apartment, lower AC bill, no glare on the monitor — engineer math that checks out. ❄️
+
+---
+
 ## 2026-06-07 (Sunday) — Reflection & Next Week's Pick 🪞
 
 Hey Itay! Sunday check-in. This week was a double feature: **Crate Storage (Project #5)** on Friday and **LED Ambient Lighting (Project #4)** on Saturday. So — how'd it go? Are there wine crates stacked into a bookshelf and LED strips glowing behind your monitor right now? Or is one still in the "supplies acquired" phase? Both count. If either is 90% there, a quiet Sunday is the perfect window to finish the mounting or program those last lighting scenes.
