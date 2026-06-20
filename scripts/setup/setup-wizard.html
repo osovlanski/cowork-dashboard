@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cowork Setup Assistant</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg2: #f5f5f3;
+    --bg3: #ededea;
+    --text: #1a1a18;
+    --text2: #6b6b67;
+    --text3: #9b9b96;
+    --border: rgba(0,0,0,0.12);
+    --border2: rgba(0,0,0,0.22);
+    --green: #1D9E75;
+    --green-bg: #E1F5EE;
+    --green-text: #085041;
+    --green-border: #5DCAA5;
+    --amber-bg: #FAEEDA;
+    --amber-text: #633806;
+    --amber-border: #EF9F27;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1e1e1c;
+      --bg2: #2a2a28;
+      --bg3: #333330;
+      --text: #f0ede8;
+      --text2: #a0a09a;
+      --text3: #6b6b67;
+      --border: rgba(255,255,255,0.1);
+      --border2: rgba(255,255,255,0.2);
+      --green-bg: #04342C;
+      --green-text: #9FE1CB;
+      --green-border: #0F6E56;
+      --amber-bg: #412402;
+      --amber-text: #FAC775;
+      --amber-border: #854F0B;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg3); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
+  .container { max-width: 720px; margin: 0 auto; }
+  h1 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: var(--text2); margin-bottom: 1.5rem; }
+  .progress-bar { height: 4px; background: var(--bg3); border-radius: 2px; margin: 12px 0 1.5rem; border: 0.5px solid var(--border); }
+  .progress-fill { height: 100%; background: var(--green); border-radius: 2px; transition: width 0.4s; }
+  .platform-bar { display: flex; gap: 6px; margin-bottom: 1rem; }
+  .platform-btn { flex: 1; padding: 7px; border-radius: var(--radius); border: 0.5px solid var(--border); background: var(--bg); color: var(--text2); cursor: pointer; font-size: 13px; text-align: center; }
+  .platform-btn.active { background: var(--bg2); color: var(--text); border-color: var(--border2); font-weight: 500; }
+  .steps-nav { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .step-pill { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--border); background: var(--bg); color: var(--text2); cursor: pointer; white-space: nowrap; }
+  .step-pill.active { background: var(--bg2); color: var(--text); border-color: var(--border2); font-weight: 500; }
+  .step-pill.done { color: var(--green-text); border-color: var(--green-border); background: var(--green-bg); }
+  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+  .card-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .card-desc { font-size: 13px; color: var(--text2); margin-bottom: 14px; line-height: 1.6; }
+  .section-label { font-size: 11px; font-weight: 500; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin: 14px 0 8px; }
+  .info-box { background: var(--green-bg); border: 0.5px solid var(--green-border); border-radius: var(--radius); padding: 10px 12px; font-size: 13px; color: var(--green-text); margin-bottom: 12px; line-height: 1.5; }
+  .warn-box { background: var(--amber-bg); border: 0.5px solid var(--amber-border); border-radius: var(--radius); padding: 10px 12px; font-size: 13px; color: var(--amber-text); margin-bottom: 12px; line-height: 1.5; }
+  .cmd-block { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 9px 12px; font-family: monospace; font-size: 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .cmd-text { white-space: pre-wrap; word-break: break-all; flex: 1; }
+  .copy-btn { background: none; border: 0.5px solid var(--border); border-radius: var(--radius); padding: 3px 8px; font-size: 11px; color: var(--text2); cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+  .copy-btn:hover { background: var(--bg2); }
+  .secret-row { display: flex; gap: 6px; margin-bottom: 8px; align-items: center; }
+  .secret-name { font-size: 11px; font-family: monospace; background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 7px 10px; min-width: 190px; color: var(--text); }
+  .secret-input { flex: 1; font-size: 12px; font-family: monospace; background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 7px 10px; color: var(--text); }
+  .secret-input:focus { outline: none; border-color: var(--border2); }
+  .secret-toggle { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 16px; padding: 4px 6px; }
+  .check-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+  .check-row input { margin-top: 3px; flex-shrink: 0; accent-color: var(--green); }
+  .check-row label { font-size: 13px; line-height: 1.5; cursor: pointer; }
+  .btn-row { display: flex; gap: 8px; margin-top: 1.25rem; flex-wrap: wrap; }
+  .btn { padding: 8px 16px; border-radius: var(--radius); border: 0.5px solid var(--border2); background: var(--bg); font-size: 13px; color: var(--text); cursor: pointer; }
+  .btn:hover { background: var(--bg2); }
+  .btn-primary { background: var(--green); color: #fff; border-color: var(--green); }
+  .btn-primary:hover { opacity: 0.9; }
+  .env-preview { background: var(--bg2); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 12px; font-family: monospace; font-size: 12px; white-space: pre; overflow-x: auto; margin-bottom: 8px; max-height: 220px; overflow-y: auto; color: var(--text); }
+  .inherited-tag { font-size: 10px; color: var(--green-text); background: var(--green-bg); border-radius: 4px; padding: 1px 5px; margin-left: 4px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>⚙️ Cowork Setup Assistant</h1>
+  <p class="subtitle">Step-by-step guided setup. Secrets stay local — never sent anywhere.</p>
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+
+  <div class="platform-bar">
+    <button class="platform-btn active" id="pb-mac" onclick="setPlatform('mac')">🍎 macOS</button>
+    <button class="platform-btn" id="pb-win" onclick="setPlatform('win')">🪟 Windows</button>
+  </div>
+
+  <div class="steps-nav" id="steps-nav"></div>
+  <div id="step-content"></div>
+
+  <div style="margin-top:2rem; padding:1rem; background:var(--bg2); border-radius:var(--radius-lg); border:0.5px solid var(--border)">
+    <div style="font-size:12px; font-weight:500; margin-bottom:8px; color:var(--text2)">Export .env.setup for local agent</div>
+    <div class="env-preview" id="env-export">Fill in secrets above to generate...</div>
+    <button class="btn" onclick="copyEnvExport()">📋 Copy .env.setup</button>
+    <p style="font-size:11px; color:var(--text3); margin-top:8px">Save this as <code>.env.setup</code> in your cowork repo root, then run: <code>npm run setup</code></p>
+  </div>
+</div>
+
+<script>
+let platform = 'mac';
+let currentStep = 0;
+let secrets = {};
+let checked = {};
+let showSecrets = {};
+
+const steps = [
+  {
+    id: 'github', label: '1 · GitHub', title: 'Push to GitHub',
+    desc: 'Initialize the repo and push your project.',
+    commands: {
+      mac: ['cd /Users/itayos/cowork','git init','git add .','git commit -m "initial: cowork dashboard"','git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git','git push -u origin main'],
+      win: ['cd C:\\Users\\itayos\\cowork','git init','git add .','git commit -m "initial: cowork dashboard"','git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git','git push -u origin main']
+    },
+    info: 'Replace YOUR_USERNAME and YOUR_REPO with your actual GitHub details.',
+    checks: ['Created repo on github.com','Ran git push successfully','Added .gitignore (agent handles this automatically)'],
+    secrets: ['GIT_USER_NAME','GIT_USER_EMAIL','GITHUB_TOKEN','GITHUB_REPO_URL']
+  },
+  {
+    id: 'supabase', label: '2 · Supabase', title: 'Supabase: Project & Schema',
+    desc: 'Create project and run the schema SQL. The browser agent can do this for you.',
+    info: 'Go to supabase.com → New Project → name: cowork-dashboard, region: EU West.',
+    checks: ['Created Supabase project','Ran supabase_schema.sql in SQL Editor','Pasted keys below'],
+    secrets: ['SUPABASE_URL','SUPABASE_ANON_KEY','SUPABASE_SERVICE_KEY']
+  },
+  {
+    id: 'gmail', label: '3 · Gmail OAuth', title: 'Gmail OAuth',
+    desc: 'Generate a refresh token so Railway can read Gmail.',
+    info: 'Download credentials JSON from Google Cloud → save as workers/credentials.json, then run the auth script.',
+    commands: {
+      mac: ['cd /Users/itayos/cowork','pip install google-auth-oauthlib --break-system-packages','python workers/setup_gmail_auth.py'],
+      win: ['cd C:\\Users\\itayos\\cowork','pip install google-auth-oauthlib --break-system-packages','python workers\\setup_gmail_auth.py']
+    },
+    checks: ['Created Google Cloud OAuth credentials (Desktop app)','Saved credentials.json to workers/','Ran auth script — granted access in browser','Pasted the three GMAIL_ values below'],
+    secrets: ['GMAIL_CLIENT_ID','GMAIL_CLIENT_SECRET','GMAIL_REFRESH_TOKEN']
+  },
+  {
+    id: 'railway', label: '4 · Railway', title: 'Railway: Env Vars',
+    desc: 'The browser agent can open Railway and paste all env vars for you.',
+    info: 'Create project at railway.app → New Project → Deploy from GitHub repo.',
+    checks: ['Created Railway project from GitHub repo','All env vars set (browser agent handles this)','GITHUB_TOKEN set with Contents: Write'],
+    secrets: ['ANTHROPIC_API_KEY']
+  },
+  {
+    id: 'vercel', label: '5 · Vercel', title: 'Vercel: Env Vars',
+    desc: 'The browser agent opens Vercel and sets env vars. Records the deployment URL.',
+    info: 'Import GitHub repo at vercel.com → Add New → Project. Framework: Other.',
+    checks: ['Imported GitHub repo to Vercel','Browser agent set env vars','Got deployment URL below'],
+    secrets: ['VERCEL_URL']
+  },
+  {
+    id: 'config', label: '6 · Config', title: 'dashboard.html CONFIG',
+    desc: 'The local agent patches dashboard.html automatically from your .env.setup.',
+    info: 'After running npm run setup, the agent writes your Supabase + Vercel values into the CONFIG block.',
+    checks: ['Ran npm run setup (local agent patched dashboard.html)','Committed and pushed — Vercel auto-redeployed']
+  },
+  {
+    id: 'verify', label: '7 · Verify', title: 'Verify Everything',
+    desc: 'Confirm each part of the stack is working.',
+    checks: ['Supabase → Table Editor shows 5 tables','Railway → ran a worker manually → Logs look good','productive/emails/ in GitHub after first email-audit run','fun/diy/daily_log.md in GitHub after first diy-log run','recurring/plans/ in GitHub after Sunday weekly-plan run','Vercel dashboard → ✨ AI summary button works','Habits persist after refresh (Supabase connected)']
+  }
+];
+
+const INHERITED_FROM = { SUPABASE_URL:'supabase', SUPABASE_ANON_KEY:'supabase', SUPABASE_SERVICE_KEY:'supabase', GMAIL_CLIENT_ID:'gmail', GMAIL_CLIENT_SECRET:'gmail', GMAIL_REFRESH_TOKEN:'gmail' };
+const ALL_SECRET_KEYS = ['GIT_USER_NAME','GIT_USER_EMAIL','GITHUB_TOKEN','GITHUB_REPO_URL','SUPABASE_URL','SUPABASE_ANON_KEY','SUPABASE_SERVICE_KEY','GMAIL_CLIENT_ID','GMAIL_CLIENT_SECRET','GMAIL_REFRESH_TOKEN','ANTHROPIC_API_KEY','VERCEL_URL'];
+
+function setPlatform(p) {
+  platform = p;
+  document.getElementById('pb-mac').className = 'platform-btn' + (p==='mac'?' active':'');
+  document.getElementById('pb-win').className = 'platform-btn' + (p==='win'?' active':'');
+  renderStep();
+}
+
+function setStep(i) { currentStep = i; renderNav(); renderStep(); }
+
+function isDone(i) {
+  const s = steps[i];
+  if (!s.checks) return false;
+  return s.checks.every((_,j) => checked[s.id+'_'+j]);
+}
+
+function updateProgress() {
+  const done = steps.filter((_,i) => isDone(i)).length;
+  document.getElementById('prog').style.width = Math.round(done/steps.length*100)+'%';
+  updateEnvExport();
+}
+
+function updateEnvExport() {
+  const lines = ALL_SECRET_KEYS.map(k => `${k}=${secrets[k]||''}`);
+  document.getElementById('env-export').textContent = lines.join('\n');
+}
+
+function copyEnvExport() {
+  navigator.clipboard.writeText(document.getElementById('env-export').textContent);
+  alert('Copied! Save as .env.setup in your cowork repo root.');
+}
+
+function renderNav() {
+  document.getElementById('steps-nav').innerHTML = steps.map((s,i) => {
+    let cls = 'step-pill' + (i===currentStep?' active':'') + (isDone(i)?' done':'');
+    return `<button class="${cls}" onclick="setStep(${i})">${isDone(i)?'✓ ':''}${s.label}</button>`;
+  }).join('');
+}
+
+function toggleShow(k) {
+  showSecrets[k] = !showSecrets[k];
+  const inp = document.getElementById('si_'+k);
+  if (inp) inp.type = showSecrets[k]?'text':'password';
+  const btn = document.getElementById('st_'+k);
+  if (btn) btn.textContent = showSecrets[k]?'🙈':'👁';
+}
+
+function setSecret(k,v) {
+  secrets[k]=v;
+  updateEnvExport();
+}
+
+function copyCmd(text, btn) {
+  navigator.clipboard.writeText(text);
+  const orig = btn.textContent; btn.textContent='✓ done'; setTimeout(()=>btn.textContent=orig,1500);
+}
+
+function toggleCheck(id) {
+  checked[id]=!checked[id];
+  updateProgress(); renderNav();
+}
+
+function renderStep() {
+  const s = steps[currentStep];
+  let h = `<div class="card">
+    <div class="card-title">${s.title}</div>
+    <div class="card-desc">${s.desc}</div>`;
+
+  if (s.info) h += `<div class="info-box">ℹ️ ${s.info}</div>`;
+
+  if (s.commands) {
+    const cmds = s.commands[platform];
+    h += `<div class="section-label">Terminal (${platform==='mac'?'macOS':'Windows'})</div>`;
+    cmds.forEach(c => h += `<div class="cmd-block"><span class="cmd-text">${c}</span><button class="copy-btn" onclick="copyCmd('${c.replace(/'/g,"\\'")}',this)">copy</button></div>`);
+  }
+
+  if (s.secrets?.length) {
+    h += `<div class="section-label">Secrets / env vars</div>`;
+    s.secrets.forEach(k => {
+      const from = INHERITED_FROM[k];
+      const fromLabel = from && from!==s.id ? `<span class="inherited-tag">auto from step ${steps.findIndex(st=>st.id===from)+1}</span>` : '';
+      const type = showSecrets[k]?'text':'password';
+      const val = secrets[k]||'';
+      h += `<div class="secret-row">
+        <span class="secret-name">${k}${fromLabel}</span>
+        <input class="secret-input" id="si_${k}" type="${type}" value="${val}" placeholder="paste value..." oninput="setSecret('${k}',this.value)" />
+        <button class="secret-toggle" id="st_${k}" onclick="toggleShow('${k}')" title="toggle">👁</button>
+      </div>`;
+    });
+  }
+
+  if (s.checks?.length) {
+    h += `<div class="section-label">Checklist</div>`;
+    s.checks.forEach((c,j) => {
+      const id = s.id+'_'+j;
+      h += `<div class="check-row"><input type="checkbox" id="ck_${id}" ${checked[id]?'checked':''} onchange="toggleCheck('${id}')"/><label for="ck_${id}">${c}</label></div>`;
+    });
+  }
+
+  h += `<div class="btn-row">`;
+  if (currentStep>0) h += `<button class="btn" onclick="setStep(${currentStep-1})">← back</button>`;
+  if (currentStep<steps.length-1) h += `<button class="btn btn-primary" onclick="setStep(${currentStep+1})">next →</button>`;
+  h += `</div></div>`;
+
+  document.getElementById('step-content').innerHTML = h;
+}
+
+renderNav(); renderStep(); updateEnvExport();
+</script>
+</body>
+</html>

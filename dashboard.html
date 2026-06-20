@@ -3,788 +3,141 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Cowork Dashboard</title>
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-<script>
-const CONFIG = {
-  supabase: {
-    url:     'https://lftejjbujwqrcnkbqlys.supabase.co',
-    anonKey: 'sb_publishable_7DDwSluDs1bpFV25agOYRg_SEmF_VLU',
-  },
-  vercel: {
-    apiUrl: 'https://cowork-dashboard-itayosov-6518s-projects.vercel.app',
-  },
-};
-</script>
+<title>Cowork — Itay</title>
 <style>
-:root {
-  --bg:       #0e0e0f;
-  --bg2:      #161618;
-  --bg3:      #1e1e21;
-  --bg4:      #26262a;
-  --line:     rgba(255,255,255,0.07);
-  --text:     #f0ede8;
-  --text2:    #9896a0;
-  --text3:    #5a5860;
-  --accent:   #c8f135;
-  --accent2:  #7b6ef6;
-  --red:      #ff5c5c;
-  --font:     'Syne', sans-serif;
-  --mono:     'JetBrains Mono', monospace;
-  --radius:   10px;
-  --radius-lg:16px;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--font);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ── noise overlay ── */
-body::before {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.025;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── layout ── */
-.shell { position: relative; z-index: 1; display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
-
-/* ── sidebar ── */
-nav {
-  border-right: 1px solid var(--line);
-  padding: 28px 20px;
-  display: flex; flex-direction: column; gap: 4px;
-  position: sticky; top: 0; height: 100vh; overflow-y: auto;
-}
-.nav-logo {
-  font-size: 15px; font-weight: 700; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--accent);
-  margin-bottom: 28px; padding-left: 4px;
-  display: flex; align-items: center; gap: 8px;
-}
-.nav-logo span { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
-.nav-section { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text3); margin: 16px 0 6px 4px; }
-.nav-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px; border-radius: var(--radius);
-  font-size: 13px; font-weight: 500; color: var(--text2);
-  cursor: pointer; transition: all 0.15s; border: none; background: none; width: 100%; text-align: left;
-}
-.nav-item:hover { background: var(--bg3); color: var(--text); }
-.nav-item.active { background: var(--bg3); color: var(--accent); }
-.nav-item .icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
-.nav-item .badge { margin-left: auto; background: var(--accent); color: var(--bg); font-size: 10px; font-weight: 700; border-radius: 20px; padding: 1px 7px; font-family: var(--mono); }
-.nav-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--line); }
-.nav-status { font-size: 11px; font-family: var(--mono); color: var(--text3); padding: 4px 4px; display: flex; align-items: center; gap: 6px; }
-.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
-.dot.red { background: var(--red); }
-
-/* ── main ── */
-main { padding: 32px 36px; overflow-y: auto; }
-.page { display: none; animation: fadein 0.2s ease; }
-.page.active { display: block; }
-@keyframes fadein { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-
-/* ── page header ── */
-.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; }
-.page-title { font-size: 24px; font-weight: 700; letter-spacing: -0.02em; }
-.page-subtitle { font-size: 13px; color: var(--text2); margin-top: 4px; }
-.header-actions { display: flex; gap: 8px; }
-
-/* ── buttons ── */
-.btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 8px 16px; border-radius: var(--radius);
-  font-size: 13px; font-weight: 600; font-family: var(--font);
-  cursor: pointer; transition: all 0.15s; border: 1px solid var(--line);
-  background: var(--bg3); color: var(--text);
-}
-.btn:hover { background: var(--bg4); border-color: rgba(255,255,255,0.12); }
-.btn-accent { background: var(--accent); color: var(--bg); border-color: var(--accent); }
-.btn-accent:hover { background: #d4ff3a; }
-.btn-sm { padding: 5px 11px; font-size: 12px; }
-.btn-icon { padding: 7px 10px; }
-
-/* ── cards ── */
-.grid { display: grid; gap: 16px; }
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-4 { grid-template-columns: repeat(4, 1fr); }
-.card {
-  background: var(--bg2); border: 1px solid var(--line);
-  border-radius: var(--radius-lg); padding: 20px;
-  transition: border-color 0.15s;
-}
-.card:hover { border-color: rgba(255,255,255,0.12); }
-.card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 8px; }
-.card-value { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; font-family: var(--mono); }
-.card-meta { font-size: 12px; color: var(--text2); margin-top: 4px; }
-.card-accent { border-left: 3px solid var(--accent); }
-.card-purple { border-left: 3px solid var(--accent2); }
-
-/* ── section titles ── */
-.section-title { font-size: 13px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text3); margin: 28px 0 14px; display: flex; align-items: center; gap: 8px; }
-.section-title::after { content: ''; flex: 1; height: 1px; background: var(--line); }
-
-/* ── email list ── */
-.email-list { display: flex; flex-direction: column; gap: 2px; }
-.email-item {
-  display: grid; grid-template-columns: auto 1fr auto;
-  gap: 14px; padding: 14px 16px; border-radius: var(--radius);
-  cursor: pointer; transition: background 0.1s; align-items: start;
-  border: 1px solid transparent;
-}
-.email-item:hover { background: var(--bg3); border-color: var(--line); }
-.email-item.expanded { background: var(--bg3); border-color: var(--line); }
-.email-avatar {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--bg4); display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 700; color: var(--accent); flex-shrink: 0;
-  font-family: var(--mono);
-}
-.email-body { min-width: 0; }
-.email-from { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
-.email-subject { font-size: 13px; color: var(--text2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.email-summary { font-size: 12px; color: var(--text2); margin-top: 8px; line-height: 1.6; display: none; }
-.email-item.expanded .email-summary { display: block; }
-.email-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-.email-time { font-size: 11px; font-family: var(--mono); color: var(--text3); }
-.priority { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.06em; }
-.priority-high { background: rgba(255,92,92,0.15); color: var(--red); }
-.priority-medium { background: rgba(200,241,53,0.12); color: var(--accent); }
-.priority-low { background: var(--bg4); color: var(--text3); }
-.ai-btn { background: none; border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; font-size: 11px; color: var(--text2); cursor: pointer; font-family: var(--font); transition: all 0.15s; }
-.ai-btn:hover { background: var(--bg4); color: var(--accent); border-color: var(--accent); }
-
-/* ── log / plan entries ── */
-.log-entry { padding: 16px; background: var(--bg2); border: 1px solid var(--line); border-radius: var(--radius); margin-bottom: 10px; }
-.log-date { font-size: 11px; font-family: var(--mono); color: var(--accent); margin-bottom: 8px; }
-.log-content { font-size: 13px; color: var(--text2); line-height: 1.7; white-space: pre-wrap; }
-
-/* ── habits ── */
-.habit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
-.habit-card {
-  background: var(--bg2); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 14px 16px;
-  display: flex; align-items: center; gap: 12px;
-  cursor: pointer; transition: all 0.15s;
-}
-.habit-card:hover { border-color: rgba(255,255,255,0.12); }
-.habit-card.done { border-color: var(--accent); background: rgba(200,241,53,0.06); }
-.habit-check {
-  width: 22px; height: 22px; border-radius: 6px;
-  border: 2px solid var(--bg4); background: var(--bg3);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; transition: all 0.15s; font-size: 13px;
-}
-.habit-card.done .habit-check { background: var(--accent); border-color: var(--accent); color: var(--bg); }
-.habit-name { font-size: 13px; font-weight: 500; }
-.habit-streak { font-size: 11px; font-family: var(--mono); color: var(--text3); margin-top: 2px; }
-.add-habit-row { display: flex; gap: 8px; margin-top: 12px; }
-.input {
-  flex: 1; background: var(--bg3); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 9px 14px;
-  font-size: 13px; font-family: var(--font); color: var(--text);
-  outline: none; transition: border-color 0.15s;
-}
-.input:focus { border-color: rgba(255,255,255,0.2); }
-.input::placeholder { color: var(--text3); }
-
-/* ── weekly plan ── */
-.plan-day { margin-bottom: 20px; }
-.plan-day-header { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; font-family: var(--mono); }
-.plan-tasks { display: flex; flex-direction: column; gap: 6px; }
-.plan-task { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--bg2); border: 1px solid var(--line); border-radius: var(--radius); font-size: 13px; }
-.plan-task input[type=checkbox] { accent-color: var(--accent); width: 15px; height: 15px; cursor: pointer; flex-shrink: 0; }
-.plan-task.done span { text-decoration: line-through; color: var(--text3); }
-
-/* ── loading / empty states ── */
-.loading { display: flex; align-items: center; gap: 10px; color: var(--text2); font-size: 13px; padding: 32px 0; }
-.spinner { width: 16px; height: 16px; border: 2px solid var(--bg4); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.empty { text-align: center; padding: 48px 0; color: var(--text3); font-size: 13px; }
-.empty-icon { font-size: 32px; margin-bottom: 10px; }
-
-/* ── AI summary modal ── */
-.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-.modal-bg.open { display: flex; }
-.modal { background: var(--bg2); border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius-lg); padding: 28px; max-width: 560px; width: 90%; }
-.modal-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
-.modal-content { font-size: 13px; color: var(--text2); line-height: 1.8; min-height: 80px; }
-.modal-footer { margin-top: 20px; display: flex; justify-content: flex-end; }
-
-/* ── toast ── */
-.toast { position: fixed; bottom: 24px; right: 24px; background: var(--bg3); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 18px; font-size: 13px; z-index: 200; transform: translateY(20px); opacity: 0; transition: all 0.2s; pointer-events: none; }
-.toast.show { transform: translateY(0); opacity: 1; }
-
-/* ── responsive ── */
-@media (max-width: 900px) {
-  .shell { grid-template-columns: 1fr; }
-  nav { position: static; height: auto; flex-direction: row; flex-wrap: wrap; padding: 16px; }
-  .nav-logo { margin-bottom: 0; }
-  .nav-section { display: none; }
-  main { padding: 20px; }
-  .grid-4 { grid-template-columns: repeat(2,1fr); }
-  .grid-3 { grid-template-columns: repeat(2,1fr); }
-}
+  :root {
+    --bg: #f9f9f8;
+    --bg2: #ffffff;
+    --text: #1a1a18;
+    --text2: #6b6b67;
+    --border: rgba(0,0,0,0.10);
+    --accent: #1D9E75;
+    --radius: 10px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a18;
+      --bg2: #242422;
+      --text: #e8e8e4;
+      --text2: #9b9b96;
+      --border: rgba(255,255,255,0.10);
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 40px 24px;
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 1.6rem; font-weight: 600; margin-bottom: 4px; }
+  .subtitle { color: var(--text2); font-size: 0.9rem; margin-bottom: 36px; }
+  .subtitle a { color: var(--accent); text-decoration: none; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .card h2 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text2); margin-bottom: 12px; }
+  .card ul { list-style: none; }
+  .card ul li { margin-bottom: 8px; }
+  .card ul li a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card ul li a:hover { color: var(--accent); }
+  .card ul li .date { color: var(--text2); font-size: 0.78rem; margin-left: auto; font-variant-numeric: tabular-nums; }
+  .tip {
+    margin-top: 32px;
+    padding: 14px 18px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    font-size: 0.85rem;
+    color: var(--text2);
+  }
+  .tip strong { color: var(--text); }
 </style>
 </head>
 <body>
 
-<div class="shell">
-<!-- ── sidebar ── -->
-<nav>
-  <div class="nav-logo"><span></span> Cowork</div>
+<h1>Cowork</h1>
+<p class="subtitle">
+  Itay Osovlanski · Tel Aviv ·
+  <a href="https://github.com/osovlanski/cowork-dashboard" target="_blank">osovlanski/cowork-dashboard ↗</a>
+</p>
 
-  <div class="nav-section">Overview</div>
-  <button class="nav-item active" onclick="showPage('overview')" id="nav-overview">
-    <span class="icon">◈</span> Overview
-  </button>
+<div class="grid">
 
-  <div class="nav-section">Productive</div>
-  <button class="nav-item" onclick="showPage('emails')" id="nav-emails">
-    <span class="icon">✉</span> Emails
-    <span class="badge" id="email-badge" style="display:none">0</span>
-  </button>
-
-  <div class="nav-section">Fun</div>
-  <button class="nav-item" onclick="showPage('diy')" id="nav-diy">
-    <span class="icon">⚒</span> DIY Log
-  </button>
-  <button class="nav-item" onclick="showPage('habits')" id="nav-habits">
-    <span class="icon">◎</span> Habits
-  </button>
-
-  <div class="nav-section">Recurring</div>
-  <button class="nav-item" onclick="showPage('plan')" id="nav-plan">
-    <span class="icon">▦</span> Weekly Plan
-  </button>
-
-  <div class="nav-section">Finance</div>
-  <button class="nav-item" onclick="showPage('markets')" id="nav-markets">
-    <span class="icon">📈</span> Markets
-  </button>
-
-  <div class="nav-section">Shopping</div>
-  <button class="nav-item" onclick="showPage('deals')" id="nav-deals">
-    <span class="icon">🛒</span> Deals
-  </button>
-
-  <div class="nav-section">Reading</div>
-  <button class="nav-item" onclick="showPage('books')" id="nav-books">
-    <span class="icon">📚</span> Books
-  </button>
-
-  <div class="nav-footer">
-    <div class="nav-status"><span class="dot" id="sb-dot"></span><span id="sb-status">connecting...</span></div>
-  </div>
-</nav>
-
-<!-- ── main content ── -->
-<main>
-
-  <!-- Overview -->
-  <div class="page active" id="page-overview">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Good morning ☀️</div>
-        <div class="page-subtitle" id="today-date">Loading...</div>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-accent" onclick="loadAll()">↺ Refresh</button>
-      </div>
-    </div>
-
-    <div class="grid grid-4" id="stat-cards">
-      <div class="card card-accent">
-        <div class="card-label">Emails today</div>
-        <div class="card-value" id="stat-emails">—</div>
-        <div class="card-meta">from audit</div>
-      </div>
-      <div class="card card-purple">
-        <div class="card-label">Habits done</div>
-        <div class="card-value" id="stat-habits">—</div>
-        <div class="card-meta">today</div>
-      </div>
-      <div class="card">
-        <div class="card-label">DIY entries</div>
-        <div class="card-value" id="stat-diy">—</div>
-        <div class="card-meta">this week</div>
-      </div>
-      <div class="card">
-        <div class="card-label">Plan tasks</div>
-        <div class="card-value" id="stat-tasks">—</div>
-        <div class="card-meta">this week</div>
-      </div>
-    </div>
-
-    <div class="section-title">Recent emails</div>
-    <div id="overview-emails"><div class="loading"><div class="spinner"></div> Loading emails...</div></div>
-
-    <div class="section-title">Today's habits</div>
-    <div id="overview-habits"><div class="loading"><div class="spinner"></div> Loading habits...</div></div>
+  <div class="card">
+    <h2>📅 Weekly Plans</h2>
+    <ul>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/recurring/plans/week_2026-06-22.md" target="_blank">Week of Jun 22 <span class="date">current</span></a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/recurring/plans/week_2026-06-08.md" target="_blank">Week of Jun 8 <span class="date">prev</span></a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/recurring/plans/week_2026-06-01.md" target="_blank">Week of Jun 1 <span class="date">prev</span></a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/tree/main/recurring/plans" target="_blank">All plans → <span class="date"></span></a></li>
+    </ul>
   </div>
 
-  <!-- Emails -->
-  <div class="page" id="page-emails">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Email Audit</div>
-        <div class="page-subtitle">AI-summarised daily inbox from Railway worker</div>
-      </div>
-      <div class="header-actions">
-        <button class="btn btn-sm" onclick="loadEmails()">↺</button>
-      </div>
-    </div>
-    <div class="email-list" id="email-list">
-      <div class="loading"><div class="spinner"></div> Loading...</div>
-    </div>
+  <div class="card">
+    <h2>📬 Email Audits</h2>
+    <ul>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/productive/emails/audit_2026-06-20.md" target="_blank">Jun 20 audit <span class="date">today</span></a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/productive/emails/audit_2026-06-07.md" target="_blank">Jun 7 audit <span class="date"></span></a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/productive/emails/audit_2026-06-05.md" target="_blank">Jun 5 audit <span class="date"></span></a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/tree/main/productive/emails" target="_blank">All audits → <span class="date"></span></a></li>
+    </ul>
   </div>
 
-  <!-- DIY Log -->
-  <div class="page" id="page-diy">
-    <div class="page-header">
-      <div>
-        <div class="page-title">DIY Log</div>
-        <div class="page-subtitle">Daily entries generated by Railway worker</div>
-      </div>
-      <button class="btn btn-sm" onclick="loadDIY()">↺</button>
-    </div>
-    <div id="diy-list"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  <div class="card">
+    <h2>🔨 DIY</h2>
+    <ul>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/fun/diy/daily_log.md" target="_blank">Daily log <span class="date">live</span></a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/fun/diy/diy_projects.md" target="_blank">Project ideas <span class="date"></span></a></li>
+    </ul>
   </div>
 
-  <!-- Habits -->
-  <div class="page" id="page-habits">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Habits</div>
-        <div class="page-subtitle">Track your daily habits — persisted in Supabase</div>
-      </div>
-    </div>
-    <div class="habit-grid" id="habit-grid"></div>
-    <div class="add-habit-row">
-      <input class="input" id="new-habit-input" placeholder="Add a new habit..." onkeydown="if(event.key==='Enter')addHabit()" />
-      <button class="btn btn-accent" onclick="addHabit()">+ Add</button>
-    </div>
+  <div class="card">
+    <h2>🎓 Learning</h2>
+    <ul>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/educative/learning/udemy_courses.md" target="_blank">Udemy courses <span class="date">Month 3</span></a></li>
+    </ul>
   </div>
 
-  <!-- Weekly Plan -->
-  <div class="page" id="page-plan">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Weekly Plan</div>
-        <div class="page-subtitle">Generated by Railway worker every Sunday</div>
-      </div>
-      <button class="btn btn-sm" onclick="loadPlan()">↺</button>
-    </div>
-    <div id="plan-content"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  <div class="card">
+    <h2>✈️ Travel</h2>
+    <ul>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/fun/travel/israel_travel_guide.md" target="_blank">🇮🇱 Israel guide</a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/fun/travel/europe_travel_guide.md" target="_blank">🇪🇺 Europe guide</a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/fun/travel/africa_travel_guide.md" target="_blank">🌍 Africa guide</a></li>
+    </ul>
   </div>
 
-  <!-- Markets -->
-  <div class="page" id="page-markets">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Markets</div>
-        <div class="page-subtitle">Daily brief from Railway worker · information only, not advice</div>
-      </div>
-      <button class="btn btn-sm" onclick="loadMarkets()">↺</button>
-    </div>
-    <div id="markets-content"><div class="loading"><div class="spinner"></div> Loading...</div></div>
+  <div class="card">
+    <h2>📚 Stories &amp; Docs</h2>
+    <ul>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/fun/stories/reading_recommendations.md" target="_blank">Reading list</a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/docs/ROADMAP.md" target="_blank">Roadmap</a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/CLAUDE.md" target="_blank">CLAUDE.md</a></li>
+      <li><a href="https://github.com/osovlanski/cowork-dashboard/blob/main/memory.md" target="_blank">memory.md</a></li>
+    </ul>
   </div>
 
-  <!-- Deals -->
-  <div class="page" id="page-deals">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Deals</div>
-        <div class="page-subtitle">Daily product scan (eBay) — scored for value</div>
-      </div>
-      <button class="btn btn-sm" onclick="loadDeals()">↺</button>
-    </div>
-    <div id="deals-list"><div class="loading"><div class="spinner"></div> Loading...</div></div>
-  </div>
-
-  <!-- Books -->
-  <div class="page" id="page-books">
-    <div class="page-header">
-      <div>
-        <div class="page-title">Reading</div>
-        <div class="page-subtitle">Weekly book picks — tap ✨ for an AI summary</div>
-      </div>
-      <button class="btn btn-sm" onclick="loadBooks()">↺</button>
-    </div>
-    <div id="books-list"><div class="loading"><div class="spinner"></div> Loading...</div></div>
-  </div>
-
-</main>
 </div>
 
-<!-- AI Modal -->
-<div class="modal-bg" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="modal-title">✨ AI Summary</div>
-    <div class="modal-content" id="modal-content"><div class="loading"><div class="spinner"></div> Asking Claude...</div></div>
-    <div class="modal-footer"><button class="btn btn-sm" onclick="closeModal()">Close</button></div>
-  </div>
+<div class="tip">
+  <strong>Agentic mode:</strong> This page is a quick-open index. For live queries — "what's in my inbox?", "what's the plan this week?" — just ask Claude in Cowork mode. It reads the files directly.
 </div>
 
-<div class="toast" id="toast"></div>
-
-<script>
-// ── Supabase client (no SDK — direct REST) ────────────────────────────────────
-const SB = {
-  headers() {
-    return {
-      apikey: CONFIG.supabase.anonKey,
-      Authorization: `Bearer ${CONFIG.supabase.anonKey}`,
-      'Content-Type': 'application/json',
-      Prefer: 'return=representation',
-    };
-  },
-  async get(table, params = '') {
-    const r = await fetch(`${CONFIG.supabase.url}/rest/v1/${table}?${params}`, { headers: this.headers() });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
-  },
-  async post(table, body) {
-    const r = await fetch(`${CONFIG.supabase.url}/rest/v1/${table}`, { method: 'POST', headers: this.headers(), body: JSON.stringify(body) });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
-  },
-  async patch(table, id, body) {
-    const r = await fetch(`${CONFIG.supabase.url}/rest/v1/${table}?id=eq.${id}`, { method: 'PATCH', headers: this.headers(), body: JSON.stringify(body) });
-    if (!r.ok) throw new Error(await r.text());
-    return r.json();
-  },
-};
-
-// ── State ─────────────────────────────────────────────────────────────────────
-let habits = [];
-let habitCompletions = new Set();
-let emails = [];
-const today = new Date().toISOString().split('T')[0];
-
-// ── Navigation ────────────────────────────────────────────────────────────────
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  document.getElementById('nav-' + id).classList.add('active');
-  if (id === 'emails') loadEmails();
-  if (id === 'diy') loadDIY();
-  if (id === 'habits') renderHabits();
-  if (id === 'plan') loadPlan();
-  if (id === 'markets') loadMarkets();
-  if (id === 'deals') loadDeals();
-  if (id === 'books') loadBooks();
-}
-
-// ── Toast ─────────────────────────────────────────────────────────────────────
-function toast(msg, duration = 2500) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), duration);
-}
-
-// ── Supabase status ───────────────────────────────────────────────────────────
-async function checkSupabase() {
-  const dot = document.getElementById('sb-dot');
-  const label = document.getElementById('sb-status');
-  try {
-    await SB.get('habits', 'limit=1');
-    dot.classList.remove('red'); label.textContent = 'Supabase connected';
-  } catch {
-    dot.classList.add('red'); label.textContent = 'Supabase error';
-  }
-}
-
-// ── Emails ────────────────────────────────────────────────────────────────────
-async function loadEmails() {
-  const el = document.getElementById('email-list');
-  const ov = document.getElementById('overview-emails');
-  try {
-    emails = await SB.get('emails', 'order=date.desc&limit=50');
-    const badge = document.getElementById('email-badge');
-    if (emails.length) { badge.textContent = emails.length; badge.style.display = ''; }
-
-    const html = emails.length ? emails.map(e => emailHTML(e)).join('') : '<div class="empty"><div class="empty-icon">✉</div>No emails yet — Railway worker runs at 08:00</div>';
-    el.innerHTML = html;
-    ov.innerHTML = emails.slice(0,3).map(e => emailHTML(e)).join('') || '<div class="empty"><div class="empty-icon">✉</div>No emails yet</div>';
-
-    document.getElementById('stat-emails').textContent = emails.length;
-  } catch(e) {
-    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
-  }
-}
-
-function emailHTML(e) {
-  const initials = (e.sender || '?').split(/[\s@]/)[0].slice(0,2).toUpperCase();
-  const pClass = e.priority === 'high' ? 'priority-high' : e.priority === 'medium' ? 'priority-medium' : 'priority-low';
-  return `<div class="email-item" onclick="toggleEmail(this)">
-    <div class="email-avatar">${initials}</div>
-    <div class="email-body">
-      <div class="email-from">${e.sender || 'Unknown'}</div>
-      <div class="email-subject">${e.subject || '(no subject)'}</div>
-      ${e.ai_summary ? `<div class="email-summary">${e.ai_summary}</div>` : ''}
-    </div>
-    <div class="email-meta">
-      <div class="email-time">${e.date || ''}</div>
-      ${e.priority ? `<span class="priority ${pClass}">${e.priority}</span>` : ''}
-      <button class="ai-btn" onclick="event.stopPropagation();aiSummary('email','${e.id}','${(e.subject||'').replace(/'/g,"\\'")}')">✨ AI</button>
-    </div>
-  </div>`;
-}
-
-function toggleEmail(el) { el.classList.toggle('expanded'); }
-
-// ── DIY Log ───────────────────────────────────────────────────────────────────
-async function loadDIY() {
-  const el = document.getElementById('diy-list');
-  try {
-    const entries = await SB.get('diy_log', 'order=date.desc&limit=20');
-    const weekAgo = new Date(); weekAgo.setDate(weekAgo.getDate()-7);
-    const thisWeek = entries.filter(e => new Date(e.date) >= weekAgo);
-    document.getElementById('stat-diy').textContent = thisWeek.length;
-
-    el.innerHTML = entries.length
-      ? entries.map(e => `<div class="log-entry"><div class="log-date">${e.date}</div><div class="log-content">${e.entry || ''}</div></div>`).join('')
-      : '<div class="empty"><div class="empty-icon">⚒</div>No DIY entries yet — Railway worker runs at 07:00</div>';
-  } catch(e) {
-    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
-  }
-}
-
-// ── Habits ────────────────────────────────────────────────────────────────────
-async function loadHabits() {
-  try {
-    habits = await SB.get('habits', 'order=created_at.asc');
-    const completions = await SB.get('habit_completions', `completed_date=eq.${today}`);
-    habitCompletions = new Set(completions.map(c => c.habit_id));
-    document.getElementById('stat-habits').textContent = `${habitCompletions.size}/${habits.length}`;
-    renderHabits();
-    renderOverviewHabits();
-  } catch(e) {
-    console.error('Habits error:', e);
-  }
-}
-
-function renderHabits() {
-  const grid = document.getElementById('habit-grid');
-  if (!habits.length) { grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-icon">◎</div>Add your first habit below</div>'; return; }
-  grid.innerHTML = habits.map(h => {
-    const done = habitCompletions.has(h.id);
-    return `<div class="habit-card ${done?'done':''}" onclick="toggleHabit('${h.id}')">
-      <div class="habit-check">${done ? '✓' : ''}</div>
-      <div><div class="habit-name">${h.name}</div><div class="habit-streak">${done ? 'done today' : 'pending'}</div></div>
-    </div>`;
-  }).join('');
-}
-
-function renderOverviewHabits() {
-  const el = document.getElementById('overview-habits');
-  if (!habits.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">◎</div>No habits yet</div>'; return; }
-  el.innerHTML = `<div class="habit-grid">${habits.slice(0,6).map(h => {
-    const done = habitCompletions.has(h.id);
-    return `<div class="habit-card ${done?'done':''}" onclick="toggleHabit('${h.id}');renderOverviewHabits()">
-      <div class="habit-check">${done?'✓':''}</div>
-      <div><div class="habit-name">${h.name}</div></div>
-    </div>`;
-  }).join('')}</div>`;
-}
-
-async function toggleHabit(id) {
-  const done = habitCompletions.has(id);
-  try {
-    if (done) {
-      // Remove completion — need to find and delete by habit_id + date
-      const completions = await SB.get('habit_completions', `habit_id=eq.${id}&completed_date=eq.${today}`);
-      if (completions[0]) {
-        await fetch(`${CONFIG.supabase.url}/rest/v1/habit_completions?id=eq.${completions[0].id}`, { method: 'DELETE', headers: SB.headers() });
-        habitCompletions.delete(id);
-      }
-    } else {
-      await SB.post('habit_completions', { habit_id: id, completed_date: today });
-      habitCompletions.add(id);
-    }
-    document.getElementById('stat-habits').textContent = `${habitCompletions.size}/${habits.length}`;
-    renderHabits();
-  } catch(e) { toast('Error: ' + e.message); }
-}
-
-async function addHabit() {
-  const input = document.getElementById('new-habit-input');
-  const name = input.value.trim();
-  if (!name) return;
-  try {
-    const result = await SB.post('habits', { name });
-    habits.push(result[0] || { id: Date.now(), name });
-    input.value = '';
-    renderHabits();
-    toast('Habit added ✓');
-  } catch(e) { toast('Error: ' + e.message); }
-}
-
-// ── Weekly Plan ───────────────────────────────────────────────────────────────
-async function loadPlan() {
-  const el = document.getElementById('plan-content');
-  try {
-    const plans = await SB.get('weekly_plans', 'order=week_start.desc&limit=1');
-    const weekTasks = await SB.get('habits', 'limit=1'); // reuse for task count
-    if (!plans.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">▦</div>No plan yet — Railway worker generates on Sunday 18:00</div>'; return; }
-
-    const plan = plans[0];
-    // Parse plan text into days if possible, otherwise show raw
-    const lines = (plan.plan || '').split('\n').filter(Boolean);
-    let html = `<div class="log-entry"><div class="log-date">Week of ${plan.week_start}</div>`;
-    let taskCount = 0;
-    let currentDay = null;
-    const dayLines = [];
-
-    lines.forEach(line => {
-      if (/^#/.test(line)) {
-        if (currentDay) dayLines.push({ day: currentDay, tasks: [...dayLines.slice(-1)[0]?.tasks||[]] });
-        currentDay = line.replace(/^#+\s*/, '');
-      }
-    });
-
-    // Simple render
-    html += `<div class="log-content">${plan.plan || ''}</div></div>`;
-    document.getElementById('stat-tasks').textContent = lines.filter(l => /^[-*]/.test(l)).length;
-    el.innerHTML = html;
-  } catch(e) {
-    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
-  }
-}
-
-// ── AI Summary ────────────────────────────────────────────────────────────────
-async function aiSummary(type, id, label) {
-  document.getElementById('modal').classList.add('open');
-  document.getElementById('modal-content').innerHTML = '<div class="loading"><div class="spinner"></div> Asking Claude...</div>';
-  try {
-    const res = await fetch(`${CONFIG.vercel.apiUrl}/api/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type, id, label }),
-    });
-    const data = await res.json();
-    document.getElementById('modal-content').textContent = data.summary || data.error || 'No response';
-  } catch(e) {
-    document.getElementById('modal-content').textContent = 'Error: ' + e.message;
-  }
-}
-
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
-
-// ── Markets ───────────────────────────────────────────────────────────────────
-function mdToHtml(md) {
-  // Minimal markdown → HTML (headings, bullets, bold, italics) for brief/plan text.
-  return (md || '')
-    .replace(/^### (.*)$/gm, '<h4>$1</h4>')
-    .replace(/^## (.*)$/gm, '<h3>$1</h3>')
-    .replace(/^# (.*)$/gm, '<h2>$1</h2>')
-    .replace(/^\s*[-*] (.*)$/gm, '• $1<br>')
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/_(.+?)_/g, '<em>$1</em>')
-    .replace(/\n{2,}/g, '<br><br>');
-}
-
-async function loadMarkets() {
-  const el = document.getElementById('markets-content');
-  try {
-    const rows = await SB.get('market_brief', 'order=date.desc&limit=1');
-    if (!rows.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📈</div>No brief yet — worker runs weekday mornings</div>'; return; }
-    const b = rows[0];
-    const data = b.data || {};
-    const cards = Object.values(data).map(s => `
-      <div class="card ${s.chg_pct >= 0 ? 'card-accent' : 'card-purple'}">
-        <div class="card-label">${s.symbol}</div>
-        <div class="card-value">${s.price}</div>
-        <div class="card-meta">${s.chg_pct >= 0 ? '▲' : '▼'} ${s.chg_pct}% · ${s.trend}</div>
-      </div>`).join('');
-    el.innerHTML =
-      (cards ? `<div class="grid grid-4">${cards}</div>` : '') +
-      `<div class="log-entry" style="margin-top:20px"><div class="log-date">${b.date}</div>` +
-      `<div class="log-content">${mdToHtml(b.brief)}</div></div>`;
-  } catch(e) {
-    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
-  }
-}
-
-// ── Deals ─────────────────────────────────────────────────────────────────────
-async function loadDeals() {
-  const el = document.getElementById('deals-list');
-  try {
-    const deals = await SB.get('deals', 'order=found_date.desc,value_score.desc&limit=40');
-    if (!deals.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">🛒</div>No deals yet — scanner runs daily at 09:00</div>'; return; }
-    el.innerHTML = deals.map(d => `
-      <div class="log-entry">
-        <div class="log-date">${d.search_term} · ${d.source}${d.value_score ? ` · score ${d.value_score}/10` : ''}</div>
-        <div class="log-content">
-          <strong>${d.title}</strong><br>
-          ${d.price != null ? `${d.price} ${d.currency} · ` : ''}${d.condition || ''}
-          ${d.reason ? `<br><em>${d.reason}</em>` : ''}
-          <br><a href="${d.url}" target="_blank" rel="noopener" style="color:var(--accent)">View on ${d.source} ↗</a>
-        </div>
-      </div>`).join('');
-  } catch(e) {
-    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
-  }
-}
-
-// ── Books ─────────────────────────────────────────────────────────────────────
-async function loadBooks() {
-  const el = document.getElementById('books-list');
-  try {
-    const books = await SB.get('books', 'order=picked_week.desc&limit=30');
-    if (!books.length) { el.innerHTML = '<div class="empty"><div class="empty-icon">📚</div>No picks yet — worker runs Sunday mornings</div>'; return; }
-    el.innerHTML = books.map(b => `
-      <div class="log-entry">
-        <div class="log-date">${b.category || 'book'} · ${b.picked_week}${b.status && b.status !== 'suggested' ? ` · ${b.status}` : ''}</div>
-        <div class="log-content">
-          <strong>${b.title}</strong>${b.author ? ` — ${b.author}` : ''}
-          ${b.reason ? `<br>${b.reason}` : ''}
-          <br><button class="ai-btn" style="margin-top:8px" onclick="aiBookSummary('${b.id}','${(b.title||'').replace(/'/g,"\\'")}')">✨ AI summary</button>
-        </div>
-      </div>`).join('');
-  } catch(e) {
-    el.innerHTML = `<div class="empty">Error: ${e.message}</div>`;
-  }
-}
-
-async function aiBookSummary(id, title) {
-  document.getElementById('modal').classList.add('open');
-  document.getElementById('modal-content').innerHTML = '<div class="loading"><div class="spinner"></div> Asking Claude...</div>';
-  try {
-    const res = await fetch(`${CONFIG.vercel.apiUrl}/api/summary`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'book', id, name: title }),
-    });
-    const data = await res.json();
-    document.getElementById('modal-content').textContent = data.summary || data.error || 'No response';
-  } catch(e) {
-    document.getElementById('modal-content').textContent = 'Error: ' + e.message;
-  }
-}
-
-// ── Init ──────────────────────────────────────────────────────────────────────
-async function loadAll() {
-  const d = new Date();
-  document.getElementById('today-date').textContent = d.toLocaleDateString('en-GB', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-  await Promise.all([checkSupabase(), loadEmails(), loadHabits(), loadDIY(), loadPlan()]);
-}
-
-loadAll();
-</script>
 </body>
 </html>
